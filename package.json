@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "/postcss-px-to-viewport-8-plugin"
+    "url": "https://github.com/xian88888888/postcss-px-to-viewport-8-plugin"
   },
   "scripts": {
     "build": "father-build",

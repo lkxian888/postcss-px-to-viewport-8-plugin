@@ -1,14 +1,16 @@
 # postcss-px-to-viewport-8-plugin
 
-使用 [postcss-px-to-viewport](https://github.com/evrone/postcss-px-to-viewport) 报错
+使用 [postcss-px-to-viewport](https://github.com/evrone/postcss-px-to-viewport) 控制台报以下代码
 
+```js
 postcss-px-to-viewport: postcss.plugin was deprecated. Migration guide: https://evilmartians.com/chronicles/postcss-8-plugin-migration
+```
 
 # 解决
 
-postcss-px-to-viewport to postcss-px-to-viewport-8-plugin
+postcss-px-to-viewport 换 postcss-px-to-viewport-8-plugin
 
-# 对应库版本
+## 对应库版本
 
 ```js
   "postcss": "^8.3.8", // 8.0.0版本都不会转单位
