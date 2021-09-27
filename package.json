@@ -1,0 +1,63 @@
+{
+  "name": "postcss-px-to-viewport-8-plugin",
+  "main": "lib/index.js",
+  "description": "css-vw",
+  "authors": {
+    "name": "lkx",
+    "email": "lkxian888@163.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "/postcss-px-to-viewport-8-plugin"
+  },
+  "scripts": {
+    "build": "father-build",
+    "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'"
+  },
+  "lint-staged": {
+    "*.ts?(x)": [
+      "prettier --parser=typescript --write",
+      "git add"
+    ],
+    "*.{js,jsx,less,md,json}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "@types/jest": "^25.1.3",
+    "@types/node": "^13.7.7",
+    "father-build": "^1.17.2",
+    "lint-staged": "^10.0.8",
+    "postcss": "^8.3.8",
+    "prettier": "^1.19.1",
+    "yorkie": "^2.0.0"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "object-assign": "^4.1.1"
+  },
+  "version": "1.1.2",
+  "directories": {
+    "example": "example"
+  },
+  "keywords": [
+    "postcss-px-to-viewport-8-plugin",
+    "viewport",
+    "postcss",
+    "postcss-plugin",
+    "css",
+    "px",
+    "vw",
+    "vh",
+    "vmin",
+    "vmax"
+  ],
+  "author": "lkx",
+  "license": "ISC"
+}
