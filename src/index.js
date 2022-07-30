@@ -93,7 +93,12 @@ module.exports = options => {
             size = opts.landscapeWidth;
           } else {
             unit = getUnit(decl.prop, opts);
-            size = opts.viewportWidth;
+            if (typeof opts.viewportWidth === 'function') {
+              size = opts.viewportWidth(file)
+            }
+            else{
+              size = opts.viewportWidth;
+            }
           }
 
           var value = decl.value.replace(
