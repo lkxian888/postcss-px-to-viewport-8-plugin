@@ -117,7 +117,7 @@ module.exports = options => {
       });
 
       if (landscapeRules.length > 0) {
-        var landscapeRoot = new postcss.atRule({
+        var landscapeRoot = new postcss.AtRule({
           params: '(orientation: landscape)',
           name: 'media',
         });
