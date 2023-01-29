@@ -1,23 +1,90 @@
-
 # postcss-px-to-viewport-8-plugin
+
+将 px 单位转换为视口单位的 (vw, vh, vmin, vmax) 的 [PostCSS](https://github.com/postcss/postcss) 插件.
 
 ## 问题
 
 使用 [postcss-px-to-viewport](https://github.com/evrone/postcss-px-to-viewport) 控制台报以下代码
 
-```bash
+```js
 postcss-px-to-viewport: postcss.plugin was deprecated. Migration guide: https://evilmartians.com/chronicles/postcss-8-plugin-migration
+
 ```
 
 ## 解决
 
-postcss-px-to-viewport 替换 postcss-px-to-viewport-8-plugin
+**postcss-px-to-viewport 替换 postcss-px-to-viewport-8-plugin**
 
-## 对应库版本
+**注意对应库版本**
 
 ```js
   "postcss": "^8.3.8", // 8.0.0版本都不会转单位
   "postcss-loader": "^6.1.1",
+```
+
+## 简介
+
+如果你的样式需要做根据视口大小来调整宽度，这个脚本可以将你 CSS 中的 px 单位转化为 vw，1vw 等于 1/100 视口宽度。
+
+## 输入
+
+```css
+.class {
+  margin: -10px 0.5vh;
+  padding: 5vmin 9.5px 1px;
+  border: 3px solid black;
+  border-bottom-width: 1px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.class2 {
+  padding-top: 10px; /* px-to-viewport-ignore */
+  /* px-to-viewport-ignore-next */
+  padding-bottom: 10px;
+  /* Any other comment */
+  border: 1px solid black;
+  margin-bottom: 1px;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+@media (min-width: 750px) {
+  .class3 {
+    font-size: 16px;
+    line-height: 22px;
+  }
+}
+```
+
+## 输出
+
+```css
+.class {
+  margin: -3.125vw 0.5vh;
+  padding: 5vmin 2.96875vw 1px;
+  border: 0.9375vw solid black;
+  border-bottom-width: 1px;
+  font-size: 4.375vw;
+  line-height: 6.25vw;
+}
+
+.class2 {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  /* Any other comment */
+  border: 1px solid black;
+  margin-bottom: 1px;
+  font-size: 6.25vw;
+  line-height: 9.375vw;
+}
+
+@media (min-width: 750px) {
+  .class3 {
+    font-size: 16px;
+    line-height: 22px;
+  }
+}
 ```
 
 ## 安装
@@ -29,7 +96,7 @@ or
 yarn add postcss-px-to-viewport-8-plugin -D
 ```
 
-## 使用与 [postcss-px-to-viewport](https://www.npmjs.com/package/postcss-px-to-viewport) 一致
+## 配置参数使用与 [postcss-px-to-viewport](https://www.npmjs.com/package/postcss-px-to-viewport) 一致
 
 **默认选项：**
 
@@ -52,35 +119,68 @@ yarn add postcss-px-to-viewport-8-plugin -D
 }
 ```
 
-- unitToConvert (String) unit to convert, by default, it is px.
-- viewportWidth (Number) The width of the viewport.
-- unitPrecision (Number) The decimal numbers to allow the vw units to grow to.
-- propList (Array) The properties that can change from px to vw.
-  - Values need to be exact matches.
-  - Use wildcard * to enable all properties. Example: ['*']
-  - Use * at the start or end of a word. (['position'] will match background-position-y)
-  - Use ! to not match a property. Example: ['*', '!letter-spacing']
-  - Combine the "not" prefix with the other prefixes. Example: ['', '!font']
-- viewportUnit (String) Expected units.
-- fontViewportUnit (String) Expected units for font.
-- selectorBlackList (Array) The selectors to ignore and leave as px.
-  - If value is string, it checks to see if selector contains the string.
-    - ['body'] will match .body-class
-  - If value is regexp, it checks to see if the selector matches the regexp.
-    - [/^body$/] will match body but not .body
-- minPixelValue (Number) Set the minimum pixel value to replace.
-- mediaQuery (Boolean) Allow px to be converted in media queries.
-- replace (Boolean) replaces rules containing vw instead of adding fallbacks.
-- exclude (Array or Regexp) Ignore some files like 'node_modules'
-  - If value is regexp, will ignore the matches files.
-  - If value is array, the elements of the array are regexp.
-- landscape (Boolean) Adds @media (orientation: landscape) with values converted via landscapeWidth.
-- landscapeUnit (String) Expected unit for landscape option
-- landscapeWidth (Number) Viewport width for landscape orientation.
+- `unitToConvert` (String) 需要转换的单位，默认为"px"
+- `viewportWidth` (Number) 设计稿的视口宽度
+- `unitPrecision` (Number) 单位转换后保留的精度
+- `propList` (Array) 能转化为 vw 的属性列表
+  - 传入特定的 CSS 属性；
+  - 可以传入通配符"_"去匹配所有属性，例如：['_']；
+  - 在属性的前或后添加"*",可以匹配特定的属性. (例如['*position\*'] 会匹配 background-position-y)
+  - 在特定属性前加 "!"，将不转换该属性的单位 . 例如: ['*', '!letter-spacing']，将不转换 letter-spacing
+  - "!" 和 "_"可以组合使用， 例如: ['_', '!font\*']，将不转换 font-size 以及 font-weight 等属性
+- `viewportUnit` (String) 希望使用的视口单位
+- `fontViewportUnit` (String) 字体使用的视口单位
+- `selectorBlackList` (Array) 需要忽略的 CSS 选择器，不会转为视口单位，使用原有的 px 等单位。
+  - 如果传入的值为字符串的话，只要选择器中含有传入值就会被匹配
+    - 例如 `selectorBlackList` 为 `['body']` 的话， 那么 `.body-class` 就会被忽略
+  - 如果传入的值为正则表达式的话，那么就会依据 CSS 选择器是否匹配该正则
+    - 例如 `selectorBlackList` 为 `[/^body$/]` , 那么 `body` 会被忽略，而 `.body` 不会
+- `minPixelValue` (Number) 设置最小的转换数值，如果为 1 的话，只有大于 1 的值会被转换
+- `mediaQuery` (Boolean) 媒体查询里的单位是否需要转换单位
+- `replace` (Boolean) 是否直接更换属性值，而不添加备用属性
+- `exclude` (Array or Regexp) 忽略某些文件夹下的文件或特定文件，例如 'node_modules' 下的文件
+  - 如果值是一个正则表达式，那么匹配这个正则的文件会被忽略
+  - 如果传入的值是一个数组，那么数组里的值必须为正则
+- `include` (Array or Regexp) 如果设置了`include`，那将只有匹配到的文件才会被转换，例如只转换 'src/mobile' 下的文件 (`include: /\/src\/mobile\//`)
+  - 如果值是一个正则表达式，将包含匹配的文件，否则将排除该文件
+  - 如果传入的值是一个数组，那么数组里的值必须为正则
+- `landscape` (Boolean) 是否添加根据 `landscapeWidth` 生成的媒体查询条件 `@media (orientation: landscape)`
+- `landscapeUnit` (String) 横屏时使用的单位
+- `landscapeWidth` (Number) 横屏时使用的视口宽度
+
+### Ignoring (需要翻译帮助)
+
+You can use special comments for ignore conversion of single lines:
+
+- `/* px-to-viewport-ignore-next */` — on a separate line, prevents conversion on the next line.
+- `/* px-to-viewport-ignore */` — after the property on the right, prevents conversion on the same line.
+
+Example:
+
+```css
+/* example input: */
+.class {
+  /* px-to-viewport-ignore-next */
+  width: 10px;
+  padding: 10px;
+  height: 10px; /* px-to-viewport-ignore */
+  border: solid 2px #000; /* px-to-viewport-ignore */
+}
+
+/* example output: */
+.class {
+  width: 10px;
+  padding: 3.125vw;
+  height: 10px;
+  border: solid 2px #000;
+}
+```
+
+There are several more reasons why your pixels may not convert, the following options may affect this: `propList`, `selectorBlackList`, `minPixelValue`, `mediaQuery`, `exclude`, `include`.
 
 ## 与 PostCss 配置文件一起使用
 
-**添加到您的 `postcss.config.js`**
+**在`postcss.config.js`文件添加如下配置**
 
 ```js
 module.exports = {
@@ -93,4 +193,6 @@ module.exports = {
 }
 ```
 
-author: lkx
+## 作者
+
+- [lkxian888](https://github.com/lkxian888)
