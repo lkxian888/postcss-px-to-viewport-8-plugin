@@ -163,7 +163,7 @@ const postcssPxToViewport = (options: OptionType) => {
 };
 
 module.exports.postcss = true;
-
+module.exports = postcssPxToViewport
 export default postcssPxToViewport;
 
 export { postcssPxToViewport };

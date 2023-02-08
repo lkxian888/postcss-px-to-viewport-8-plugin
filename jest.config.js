@@ -1,8 +1,14 @@
+// module.exports = {
+// moduleNameMapper(memo) {
+//   return Object.assign(memo, {
+//     '^react$': require.resolve('react'),
+//     '^react-dom$': require.resolve('react-dom'),
+//   });
+// },
+// };
+
+/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
-  // moduleNameMapper(memo) {
-  //   return Object.assign(memo, {
-  //     '^react$': require.resolve('react'),
-  //     '^react-dom$': require.resolve('react-dom'),
-  //   });
-  // },
+  preset: 'ts-jest',
+  testEnvironment: 'node',
 };

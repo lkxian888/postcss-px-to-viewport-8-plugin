@@ -5,7 +5,7 @@
 /* global describe, it, expect */
 
 var postcss = require('postcss');
-var pxToViewport = require('../src/index');
+var pxToViewport = require('../lib');
 var basicCSS = '.rule { font-size: 15px }';
 var { filterPropList } = require('../src/prop-list-matcher');
 
