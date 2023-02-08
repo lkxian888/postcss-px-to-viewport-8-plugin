@@ -1,78 +1,78 @@
-var filterPropList = {
-  exact: function(list) {
-    return list.filter(function(m) {
+const filterPropList = {
+  exact(list: string[]) {
+    return list.filter((m: string) => {
       return m.match(/^[^\*\!]+$/);
     });
   },
-  contain: function(list) {
+  contain(list: string[]) {
     return list
-      .filter(function(m) {
+      .filter(m => {
         return m.match(/^\*.+\*$/);
       })
-      .map(function(m) {
+      .map(m => {
         return m.substr(1, m.length - 2);
       });
   },
-  endWith: function(list) {
+  endWith(list: string[]) {
     return list
-      .filter(function(m) {
+      .filter(m => {
         return m.match(/^\*[^\*]+$/);
       })
-      .map(function(m) {
+      .map(m => {
         return m.substr(1);
       });
   },
-  startWith: function(list) {
+  startWith(list: string[]) {
     return list
-      .filter(function(m) {
+      .filter(m => {
         return m.match(/^[^\*\!]+\*$/);
       })
-      .map(function(m) {
+      .map(m => {
         return m.substr(0, m.length - 1);
       });
   },
-  notExact: function(list) {
+  notExact(list: string[]) {
     return list
-      .filter(function(m) {
+      .filter(m => {
         return m.match(/^\![^\*].*$/);
       })
-      .map(function(m) {
+      .map(m => {
         return m.substr(1);
       });
   },
-  notContain: function(list) {
+  notContain(list: string[]) {
     return list
-      .filter(function(m) {
+      .filter(m => {
         return m.match(/^\!\*.+\*$/);
       })
-      .map(function(m) {
+      .map(m => {
         return m.substr(2, m.length - 3);
       });
   },
-  notEndWith: function(list) {
+  notEndWith(list: string[]) {
     return list
-      .filter(function(m) {
+      .filter(m => {
         return m.match(/^\!\*[^\*]+$/);
       })
-      .map(function(m) {
+      .map(m => {
         return m.substr(2);
       });
   },
-  notStartWith: function(list) {
+  notStartWith(list: string[]) {
     return list
-      .filter(function(m) {
+      .filter(m => {
         return m.match(/^\![^\*]+\*$/);
       })
-      .map(function(m) {
+      .map(m => {
         return m.substr(1, m.length - 2);
       });
   },
 };
 
-function createPropListMatcher(propList) {
-  var hasWild = propList.indexOf('*') > -1;
-  var matchAll = hasWild && propList.length === 1;
-  var lists = {
+const createPropListMatcher = (propList: string[]) => {
+  const hasWild = propList.indexOf('*') > -1;
+  const matchAll = hasWild && propList.length === 1;
+  const lists = {
     exact: filterPropList.exact(propList),
     contain: filterPropList.contain(propList),
     startWith: filterPropList.startWith(propList),
@@ -82,37 +82,33 @@ function createPropListMatcher(propList) {
     notStartWith: filterPropList.notStartWith(propList),
     notEndWith: filterPropList.notEndWith(propList),
   };
-  return function(prop) {
+  return function(prop: string) {
     if (matchAll) return true;
     return (
       (hasWild ||
         lists.exact.indexOf(prop) > -1 ||
-        lists.contain.some(function(m) {
+        lists.contain.some(m => {
           return prop.indexOf(m) > -1;
         }) ||
-        lists.startWith.some(function(m) {
+        lists.startWith.some(m => {
           return prop.indexOf(m) === 0;
         }) ||
-        lists.endWith.some(function(m) {
+        lists.endWith.some(m => {
           return prop.indexOf(m) === prop.length - m.length;
         })) &&
       !(
         lists.notExact.indexOf(prop) > -1 ||
-        lists.notContain.some(function(m) {
+        lists.notContain.some(m => {
           return prop.indexOf(m) > -1;
         }) ||
-        lists.notStartWith.some(function(m) {
+        lists.notStartWith.some(m => {
           return prop.indexOf(m) === 0;
         }) ||
-        lists.notEndWith.some(function(m) {
+        lists.notEndWith.some(m => {
           return prop.indexOf(m) === prop.length - m.length;
         })
       )
     );
   };
-}
-
-module.exports = {
-  filterPropList,
-  createPropListMatcher,
 };
+export { filterPropList, createPropListMatcher };

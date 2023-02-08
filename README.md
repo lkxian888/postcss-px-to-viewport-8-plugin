@@ -120,7 +120,7 @@ yarn add postcss-px-to-viewport-8-plugin -D
 ```
 
 - `unitToConvert` (String) 需要转换的单位，默认为"px"
-- `viewportWidth` (Number) 设计稿的视口宽度
+- `viewportWidth` (Number | Function) 设计稿的视口宽度,如传入函数，函数的参数为当前处理的文件路径
 - `unitPrecision` (Number) 单位转换后保留的精度
 - `propList` (Array) 能转化为 vw 的属性列表
   - 传入特定的 CSS 属性；
@@ -192,6 +192,13 @@ module.exports = {
   }
 }
 ```
+
+## Ignoring
+
+你可以使用特殊的注释来忽略单行的转换:
+
+- `/* px-to-viewport-ignore-next */` — 在单独的行上，防止在下一行上进行转换。
+- `/* px-to-viewport-ignore */` — 在右边的属性之后，防止在同一行上进行转换。
 
 ## 作者
 
