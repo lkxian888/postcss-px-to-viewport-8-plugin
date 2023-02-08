@@ -1,6 +1,6 @@
 {
   "name": "postcss-px-to-viewport-8-plugin",
-  "version": "1.1.9",
+  "version": "1.2.0",
   "main": "lib/index.js",
   "module": "lib/index.js",
   "typings": "lib/index.d.ts",
