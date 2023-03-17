@@ -1,6 +1,62 @@
-# postcss-px-to-viewport-8-plugin
+# postcss-px-to-viewport-design
 
 将 px 单位转换为视口单位的 (vw, vh, vmin, vmax) 的 [PostCSS](https://github.com/postcss/postcss) 插件.
+
+## 扩展
+
+基于[postcss-px-to-viewport-8-plugin](https://github.com/qqlcx5/postcss-px-to-viewport-8-plugin.git)插件的基础上，添加横屏和竖屏在不同设计稿尺寸UI库解决方案。
+
+```js
+// postcss.config.js
+const px2viewport = require('postcss-px-to-viewport-design')
+const path = require('path')
+const normalSize = (file) => path.join(file).includes(path.join('node_modules', 'vant'))
+
+module.exports = {
+  plugins: [
+    px2viewport({
+      unitToConvert: 'px', //需要转换的单位，默认为"px"
+      viewportWidth: normalSize(file) ? 375 : 750, // 视窗的宽度，对应设计稿的宽度
+      viewportUnit: 'vw', // 指定需要转换成的视窗单位，建议使用 rem
+      fontViewportUnit: 'vw', // 字体使用的视口单位
+      unitPrecision: 13, // 指定`px`转换为视窗单位值的小数后 x位数
+      propList: ['*'], // 能转化为 rem的属性列表
+      selectorBlackList: [], //指定不转换为视窗单位的类，可以自定义，可以无限添加,建议定义一至两个通用的类名
+      minPixelValue: 1, // 小于或等于`1px`不转换为视窗单位，你也可以设置为你想要的值
+      mediaQuery: false, // 允许在媒体查询中转换
+      replace: true, //是否直接更换属性值，而不添加备用属性
+      exclude: /node_modules\/(?!(element-plus|vant))/, //忽略某些文件夹下的文件或特定文件，例如 'node_modules' 下的文件
+      // exclude: /node_modules/, //忽略某些文件夹下的文件或特定文件，例如 'node_modules' 下的文件
+      landscape: true, //是否添加根据 landscapeWidth 生成的媒体查询条件 @media (orientation: landscape)
+      landscapeUnit: 'vw', //横屏时使用的单位
+      landscapeWidth: normalSize(file) ? 667 : 1334 //横屏时使用的视口宽度
+    })
+  ]
+}
+```
+
+## 源码
+
+```ts
+// index.ts 123行修改
+if (opts.landscape && params && params.indexOf('landscape') !== -1) {
+  unit = opts.landscapeUnit;
+  if (typeof opts.viewportWidth === 'function') {
+    // @ts-ignore default number
+    size = opts.landscapeWidth(file);
+  } else {
+    size = opts.landscapeWidth;
+  }
+} else {
+  unit = getUnit(decl.prop, opts);
+  if (typeof opts.viewportWidth === 'function') {
+    // @ts-ignore default number
+    size = opts.viewportWidth(file);
+  } else {
+    size = opts.viewportWidth;
+  }
+}
+```
 
 ## 问题
 
@@ -13,7 +69,7 @@ postcss-px-to-viewport: postcss.plugin was deprecated. Migration guide: https://
 
 ## 解决
 
-**postcss-px-to-viewport 替换 postcss-px-to-viewport-8-plugin**
+**postcss-px-to-viewport 替换 postcss-px-to-viewport-design**
 
 **注意对应库版本**
 
@@ -91,9 +147,9 @@ postcss-px-to-viewport: postcss.plugin was deprecated. Migration guide: https://
 
 ```js
 
-npm install postcss-px-to-viewport-8-plugin -D
+npm install postcss-px-to-viewport-design -D
 or
-yarn add postcss-px-to-viewport-8-plugin -D
+yarn add postcss-px-to-viewport-design -D
 ```
 
 ## 配置参数使用与 [postcss-px-to-viewport](https://www.npmjs.com/package/postcss-px-to-viewport) 一致
@@ -186,7 +242,7 @@ There are several more reasons why your pixels may not convert, the following op
 module.exports = {
   plugins: {
     ...
-    'postcss-px-to-viewport-8-plugin': {
+    'postcss-px-to-viewport-design': {
       // options
     }
   }
@@ -202,4 +258,4 @@ module.exports = {
 
 ## 作者
 
-- [lkxian888](https://github.com/lkxian888)
+- [qqlcx5](https://github.com/qqlcx5)
