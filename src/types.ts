@@ -79,7 +79,7 @@ export type OptionType = {
   /**
    * 横屏时使用的视口宽度
    */
-  landscapeWidth?: number;
+  landscapeWidth?: number | ((filePath: string) => number);
 };
 
 export type ParentExtendType = { prop: string; value: string; params: string };

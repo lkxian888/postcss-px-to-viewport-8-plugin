@@ -146,7 +146,7 @@ yarn add postcss-px-to-viewport-8-plugin -D
   - 如果传入的值是一个数组，那么数组里的值必须为正则
 - `landscape` (Boolean) 是否添加根据 `landscapeWidth` 生成的媒体查询条件 `@media (orientation: landscape)`
 - `landscapeUnit` (String) 横屏时使用的单位
-- `landscapeWidth` (Number) 横屏时使用的视口宽度
+- `landscapeWidth` (Number | Function) 横屏时使用的视口宽度 设计稿的视口宽度,如传入函数，函数的参数为当前处理的文件路径
 
 ### Ignoring (需要翻译帮助)
 

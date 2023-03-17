@@ -122,7 +122,12 @@ const postcssPxToViewport = (options: OptionType) => {
 
           if (opts.landscape && params && params.indexOf('landscape') !== -1) {
             unit = opts.landscapeUnit;
-            size = opts.landscapeWidth;
+            if (typeof opts.viewportWidth === 'function') {
+              // @ts-ignore default number
+              size = opts.landscapeWidth(file);
+            } else {
+              size = opts.landscapeWidth;
+            }
           } else {
             unit = getUnit(decl.prop, opts);
             if (typeof opts.viewportWidth === 'function') {
