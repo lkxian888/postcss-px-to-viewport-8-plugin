@@ -1,17 +1,17 @@
 {
-  "name": "postcss-px-to-viewport-8-plugin",
-  "version": "1.2.0",
+  "name": "postcss-px-to-viewport-design",
+  "version": "1.2.1",
   "main": "lib/index.js",
   "module": "lib/index.js",
   "typings": "lib/index.d.ts",
   "description": "css-vw",
   "authors": {
-    "name": "lkxian888",
-    "email": "lkxian888@163.com"
+    "name": "qqlcx5",
+    "email": "qqlcx5@163.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/lkxian888/postcss-px-to-viewport-8-plugin"
+    "url": "https://github.com/qqlcx5/postcss-px-to-viewport-design"
   },
   "scripts": {
     "build": "father build",
@@ -52,7 +52,7 @@
     "example": "example"
   },
   "keywords": [
-    "postcss-px-to-viewport-8-plugin",
+    "postcss-px-to-viewport-design",
     "viewport",
     "postcss",
     "postcss-plugin",
@@ -63,6 +63,6 @@
     "vmin",
     "vmax"
   ],
-  "author": "lkxian888",
+  "author": "qqlcx5",
   "license": "MIT"
 }
