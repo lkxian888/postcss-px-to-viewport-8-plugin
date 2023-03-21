@@ -126,8 +126,9 @@ const postcssPxToViewport = (options: OptionType) => {
           } else {
             unit = getUnit(decl.prop, opts);
             if (typeof opts.viewportWidth === 'function') {
-              // @ts-ignore default number
-              size = opts.viewportWidth(file);
+              const num = opts.viewportWidth(file)
+              if(!num)return
+              size = num;
             } else {
               size = opts.viewportWidth;
             }
