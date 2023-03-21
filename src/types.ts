@@ -78,8 +78,10 @@ export type OptionType = {
   landscapeUnit?: string;
   /**
    * 横屏时使用的视口宽度
+   * 支持传入函数，函数的参数为当前处理的文件路径
    */
-  landscapeWidth?: number;
+  landscapeWidth?: number | ((filePath: string) => number);
+
 };
 
 export type ParentExtendType = { prop: string; value: string; params: string };

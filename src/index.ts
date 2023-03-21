@@ -73,11 +73,21 @@ const postcssPxToViewport = (options: OptionType) => {
             if (decl.value.indexOf(opts.unitToConvert) === -1) return;
             if (!satisfyPropList(decl.prop)) return;
 
+            let landscapeWidth
+
+            if (typeof opts.landscapeWidth === 'function') {
+              const num = opts.landscapeWidth(file)
+              if(!num)return
+              landscapeWidth = num;
+            }else{
+               landscapeWidth = opts.landscapeWidth
+            }
+
             landscapeRule.append(
               decl.clone({
                 value: decl.value.replace(
                   pxRegex,
-                  createPxReplace(opts, opts.landscapeUnit, opts.landscapeWidth),
+                  createPxReplace(opts, opts.landscapeUnit, landscapeWidth),
                 ),
               }),
             );
@@ -122,7 +132,15 @@ const postcssPxToViewport = (options: OptionType) => {
 
           if (opts.landscape && params && params.indexOf('landscape') !== -1) {
             unit = opts.landscapeUnit;
-            size = opts.landscapeWidth;
+
+            if (typeof opts.landscapeWidth === 'function') {
+              const num = opts.landscapeWidth(file)
+              if(!num)return
+              size = num;
+            } else {
+              size = opts.landscapeWidth;
+            }
+
           } else {
             unit = getUnit(decl.prop, opts);
             if (typeof opts.viewportWidth === 'function') {

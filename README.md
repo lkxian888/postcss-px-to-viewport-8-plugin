@@ -135,7 +135,7 @@ yarn add postcss-px-to-viewport-8-plugin -D
 | `replace` | 是否直接更换属性值，而不添加备用属性 | `boolean` | true |
 | `landscape` | 是否添加根据 `landscapeWidth` 生成的媒体查询条件 `@media (orientation: landscape)` | `boolean` | false |
 | `landscapeUnit` | 横屏时使用的单位 | `string` | vw |
-| `landscapeWidth` | 横屏时使用的视口宽度 | `number` | 568 |
+| `landscapeWidth` | 横屏时使用的视口宽度,,如传入函数，函数的参数为当前处理的文件路径,函数返回 `undefind` 跳过转换 | `number` | 568 |
 | `exclude` | 忽略某些文件夹下的文件或特定文件，例如 node_modules 下的文件，如果值是一个正则表达式，那么匹配这个正则的文件会被忽略，如果传入的值是一个数组，那么数组里的值必须为正则 | `Regexp` | undefined |
 | `include` | 需要转换的文件，例如只转换 'src/mobile' 下的文件 (`include: /\/src\/mobile\//`)，如果值是一个正则表达式，将包含匹配的文件，否则将排除该文件， 如果传入的值是一个数组，那么数组里的值必须为正则 | `Regexp` | undefined |
 
