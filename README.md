@@ -200,7 +200,7 @@ module.exports = {
 }
 ```
 
-## viet 使用
+## vite 使用
 
 **在`vite.config.ts`文件添加如下配置**
 
