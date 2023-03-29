@@ -11,7 +11,7 @@ import {
 } from './utils';
 import objectAssign from 'object-assign';
 
-import type { AtRule, Root } from 'postcss';
+import { AtRule, Root, Rule } from 'postcss';
 import postcss from 'postcss';
 
 const defaults: Required<Omit<OptionType, 'exclude' | 'include'>> = {
@@ -48,7 +48,6 @@ const postcssPxToViewport = (options: OptionType) => {
       css.walkRules((rule: RuleType) => {
         // Add exclude option to ignore some files like 'node_modules'
         const file = rule.source?.input.file || '';
-
         if (opts.exclude && file) {
           if (Object.prototype.toString.call(opts.exclude) === '[object RegExp]') {
             if (isExclude(opts.exclude as RegExp, file)) return;
@@ -68,13 +67,10 @@ const postcssPxToViewport = (options: OptionType) => {
 
         if (opts.landscape && !rule.parent?.params) {
           const landscapeRule = rule.clone().removeAll();
-
           rule.walkDecls((decl) => {
             if (decl.value.indexOf(opts.unitToConvert) === -1) return;
             if (!satisfyPropList(decl.prop)) return;
-
             let landscapeWidth
-
             if (typeof opts.landscapeWidth === 'function') {
               const num = opts.landscapeWidth(file)
               if(!num)return
@@ -98,7 +94,7 @@ const postcssPxToViewport = (options: OptionType) => {
           }
         }
 
-        if (!validateParams(rule.parent?.params, opts.mediaQuery)) return;
+        // if (!validateParams(rule.parent?.params, opts.mediaQuery)) return;
 
         rule.walkDecls((decl, i) => {
           if (decl.value.indexOf(opts.unitToConvert) === -1) return;
@@ -158,31 +154,50 @@ const postcssPxToViewport = (options: OptionType) => {
             return;
 
           if (opts.replace) {
-            // eslint-disable-next-line no-param-reassign
             decl.value = value;
           } else {
             decl.parent?.insertAfter(i, decl.clone({ value }));
           }
         });
+
+
       });
 
-      if (landscapeRules.length > 0) {
-        const landscapeRoot = new postcss.AtRule({
-          params: '(orientation: landscape)',
-          name: 'media',
-        });
+      // if (landscapeRules.length > 0) {
+      //   const landscapeRoot = new AtRule({
+      //     params: '(orientation: landscape)',
+      //     name: 'media',
+      //   });
 
-        landscapeRules.forEach((rule) => {
-          landscapeRoot.append(rule);
-        });
-        css.append(landscapeRoot);
-      }
+      //   landscapeRules.forEach((rule) => {
+      //     landscapeRoot.append(rule);
+      //   });
+      //   css.append(landscapeRoot);
+      // }
     },
+    // https://www.postcss.com.cn/docs/writing-a-postcss-plugin
+    // Declaration Rule RuleExit OnceExit
+    // There two types or listeners: enter and exit.
+    // Once, Root, AtRule, and Rule will be called before processing children.
+    // OnceExit, RootExit, AtRuleExit, and RuleExit after processing all children inside node.
+    OnceExit(css: Root, { AtRule }:{AtRule:any}) {
+    // 在 Once里跑这段逻辑，设置横屏时，打包后到生产环境竖屏样式会覆盖横屏样式，所以 OnceExit再执行。
+      if (landscapeRules.length > 0) {
+        const landscapeRoot = new AtRule({
+          params: '(orientation: landscape)',
+          name: 'media'
+        })
+
+        landscapeRules.forEach(function (rule) {
+          landscapeRoot.append(rule)
+        })
+        css.append(landscapeRoot)
+      }
+    }
   };
 };
 
-module.exports.postcss = true;
+postcssPxToViewport.postcss = true;
 module.exports = postcssPxToViewport
 export default postcssPxToViewport;
 
-export { postcssPxToViewport };

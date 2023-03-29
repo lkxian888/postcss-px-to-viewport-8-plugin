@@ -12,7 +12,7 @@ export type OptionType = {
    * 设计稿的视口宽度
    * 支持传入函数，函数的参数为当前处理的文件路径
    */
-  viewportWidth?: number | ((filePath: string) => number);
+  viewportWidth?: number | ((filePath: string) => number|undefined);
   /**
    * 设计稿的视口高度
    */
@@ -80,7 +80,7 @@ export type OptionType = {
    * 横屏时使用的视口宽度
    * 支持传入函数，函数的参数为当前处理的文件路径
    */
-  landscapeWidth?: number | ((filePath: string) => number);
+  landscapeWidth?: number | ((filePath: string) => number|undefined);
 
 };
 
