@@ -97,7 +97,20 @@ const postcssPxToViewport = (options: OptionType) => {
         // if (!validateParams(rule.parent?.params, opts.mediaQuery)) return;
 
         rule.walkDecls((decl, i) => {
-          if (decl.value.indexOf(opts.unitToConvert) === -1) return;
+          // 增加一个样例，如果是大写的 PX , 那么就扭转为小写的，忽略转换，保留原单位
+          const declValue = decl.value;
+          const isHaveLowerCaseUnit = declValue.indexOf(opts.unitToConvert) > -1;
+          const isHaveUpperCaseUnit = declValue.indexOf(opts.unitToConvert.toUpperCase()) > -1;
+
+          // 小写，大写都没有，直接退出
+          if (!isHaveLowerCaseUnit && !isHaveUpperCaseUnit) return;
+
+          // 没有小写，有大写，修改为小写，并退出
+          if (!isHaveLowerCaseUnit && isHaveUpperCaseUnit) {
+            decl.value = declValue.toLowerCase();
+            return;
+          }
+
           if (!satisfyPropList(decl.prop)) return;
 
           const prev = decl.prev();

@@ -744,4 +744,14 @@ describe('/* px-to-viewport-ignore */ & /* px-to-viewport-ignore-next */', funct
 
     expect(processed).toBe(expected);
   });
+  it('should ignore convert, keep the unit lowerCase', function() {
+    var css =
+      '.rule {\n  font-size: 15PX;\n  /*px-to-viewport-ignore-next*/\n  width: 100px;\n  /*px-to-viewport-ignore*/\n  height: 50px;\n}';
+    var expected =
+      '.rule {\n  font-size: 15px;\n  width: 100px;\n  /*px-to-viewport-ignore*/\n  height: 15.625vw;\n}';
+
+    var processed = postcss(pxToViewport()).process(css).css;
+
+    expect(processed).toBe(expected);
+  });
 });
