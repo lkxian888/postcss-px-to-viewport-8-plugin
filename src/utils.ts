@@ -1,5 +1,20 @@
 import { OptionType, ParentExtendType } from './types';
 
+/**
+ * 偏函数
+ * @param {*} type
+ * @returns
+ */
+const isType = function(type: string) {
+  return function(obj: unknown) {
+    return Object.prototype.toString.call(obj) == '[object ' + type + ']';
+  };
+};
+export const _isArray = isType('Array');
+export const _isObject = isType('Object');
+export const _isRegExp = isType('RegExp');
+export const _isFunction = isType('Function');
+
 export const getUnit = (prop: string | string[], opts: OptionType) => {
   return prop.indexOf('font') === -1
     ? opts.viewportUnit
