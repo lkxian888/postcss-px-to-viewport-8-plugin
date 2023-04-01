@@ -1,4 +1,4 @@
-import type { Rule } from 'postcss';
+import { Rule } from 'postcss';
 
 export type OptionType = {
   //  /* px-to-viewport-ignore-next */  在另一行上，阻止下一行上的转换
@@ -12,7 +12,7 @@ export type OptionType = {
    * 设计稿的视口宽度
    * 支持传入函数，函数的参数为当前处理的文件路径
    */
-  viewportWidth?: number | ((filePath: string) => number|undefined);
+  viewportWidth?: number | ((filePath: string) => number | undefined);
   /**
    * 设计稿的视口高度
    */
@@ -80,8 +80,7 @@ export type OptionType = {
    * 横屏时使用的视口宽度
    * 支持传入函数，函数的参数为当前处理的文件路径
    */
-  landscapeWidth?: number | ((filePath: string) => number|undefined);
-
+  landscapeWidth?: number | ((filePath: string) => number | undefined);
 };
 
 export type ParentExtendType = { prop: string; value: string; params: string };
