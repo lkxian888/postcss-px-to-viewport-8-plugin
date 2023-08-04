@@ -94,7 +94,7 @@ const postcssPxToViewport = (options: OptionType) => {
           }
         }
 
-        // if (!validateParams(rule.parent?.params, opts.mediaQuery)) return;
+        if (!validateParams(rule.parent?.params, opts.mediaQuery)) return;
 
         rule.walkDecls((decl, i) => {
           if (decl.value.indexOf(opts.unitToConvert) === -1) return;
