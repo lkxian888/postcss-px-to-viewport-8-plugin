@@ -1,7 +1,24 @@
-import type { OptionType, ParentExtendType } from './types';
+import { OptionType, ParentExtendType } from './types';
+
+/**
+ * 偏函数
+ * @param {*} type
+ * @returns
+ */
+const isType = function(type: string) {
+  return function(obj: unknown) {
+    return Object.prototype.toString.call(obj) == '[object ' + type + ']';
+  };
+};
+export const _isArray = isType('Array');
+export const _isObject = isType('Object');
+export const _isRegExp = isType('RegExp');
+export const _isFunction = isType('Function');
 
 export const getUnit = (prop: string | string[], opts: OptionType) => {
-  return prop.indexOf('font') === -1 ? opts.viewportUnit : opts.fontViewportUnit;
+  return prop.indexOf('font') === -1
+    ? opts.viewportUnit
+    : opts.fontViewportUnit;
 };
 
 export const createPxReplace = (
@@ -9,11 +26,14 @@ export const createPxReplace = (
   viewportUnit: string | number,
   viewportSize: number,
 ) => {
-  return function (m: any, $1: string) {
+  return function(m: any, $1: string) {
     if (!$1) return m;
     const pixels = parseFloat($1);
     if (pixels <= opts.minPixelValue!) return m;
-    const parsedVal = toFixed((pixels / viewportSize) * 100, opts.unitPrecision!);
+    const parsedVal = toFixed(
+      (pixels / viewportSize) * 100,
+      opts.unitPrecision!,
+    );
     return parsedVal === 0 ? '0' : `${parsedVal}${viewportUnit}`;
   };
 };
@@ -26,7 +46,7 @@ export const toFixed = (number: number, precision: number) => {
 
 export const blacklistedSelector = (blacklist: string[], selector: string) => {
   if (typeof selector !== 'string') return;
-  return blacklist.some((regex) => {
+  return blacklist.some(regex => {
     if (typeof regex === 'string') return selector.indexOf(regex) !== -1;
     return selector.match(regex);
   });
@@ -39,7 +59,11 @@ export const isExclude = (reg: RegExp, file: string) => {
   return file.match(reg) !== null;
 };
 
-export const declarationExists = (decls: ParentExtendType[], prop: string, value: string) => {
+export const declarationExists = (
+  decls: ParentExtendType[],
+  prop: string,
+  value: string,
+) => {
   return decls?.some((decl: ParentExtendType) => {
     return decl.prop === prop && decl.value === value;
   });
