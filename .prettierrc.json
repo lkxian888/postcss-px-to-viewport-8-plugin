@@ -1,8 +1,10 @@
 {
-  "printWidth": 80,
+  "printWidth": 100,
+  "semi": true,
+  "tabWidth": 2,
   "singleQuote": true,
   "trailingComma": "all",
-  "proseWrap": "never",
+  "arrowParens": "always",
   "overrides": [
     {
       "files": ".prettierrc",
