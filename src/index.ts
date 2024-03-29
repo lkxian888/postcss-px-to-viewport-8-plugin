@@ -39,7 +39,7 @@ const postcssPxToViewport = (options: OptionType) => {
 
   const pxRegex = getUnitRegexp(opts.unitToConvert);
   const satisfyPropList = createPropListMatcher(opts.propList);
-  const landscapeRules: AtRule[] = [];
+  let landscapeRules: AtRule[] = [];
 
   return {
     postcssPlugin: 'postcss-px-to-viewport',
@@ -189,6 +189,7 @@ const postcssPxToViewport = (options: OptionType) => {
           landscapeRoot.append(rule);
         });
         css.append(landscapeRoot);
+        landscapeRules = []
       }
     },
   };
