@@ -39,6 +39,13 @@ export const isExclude = (reg: RegExp, file: string) => {
   return file.match(reg) !== null;
 };
 
+export const isInclude = (reg: RegExp, file: string) => {
+  if (Object.prototype.toString.call(reg) !== '[object RegExp]') {
+    throw new Error('options.include should be RegExp.');
+  }
+  return file.match(reg) !== null;
+}
+
 export const declarationExists = (decls: ParentExtendType[], prop: string, value: string) => {
   return decls?.some((decl: ParentExtendType) => {
     return decl.prop === prop && decl.value === value;
