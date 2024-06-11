@@ -11,10 +11,8 @@ var { filterPropList } = require('../src/prop-list-matcher');
 
 describe('px-to-viewport', function() {
   it('should work on the readme example', function() {
-    var input =
-      'h1 { margin: 0 0 20px; font-size: 32px; line-height: 2; letter-spacing: 1px; }';
-    var output =
-      'h1 { margin: 0 0 6.25vw; font-size: 10vw; line-height: 2; letter-spacing: 1px; }';
+    var input = 'h1 { margin: 0 0 20px; font-size: 32px; line-height: 2; letter-spacing: 1px; }';
+    var output = 'h1 { margin: 0 0 6.25vw; font-size: 10vw; line-height: 2; letter-spacing: 1px; }';
     var processed = postcss(pxToViewport()).process(input).css;
 
     expect(processed).toBe(output);
@@ -67,10 +65,8 @@ describe('value parsing', function() {
     var options = {
       propList: ['*'],
     };
-    var rules =
-      '.rule { content: \'16px\'; font-family: "16px"; font-size: 16px; }';
-    var expected =
-      '.rule { content: \'16px\'; font-family: "16px"; font-size: 5vw; }';
+    var rules = '.rule { content: \'16px\'; font-family: "16px"; font-size: 16px; }';
+    var expected = '.rule { content: \'16px\'; font-family: "16px"; font-size: 5vw; }';
     var processed = postcss(pxToViewport(options)).process(rules).css;
 
     expect(processed).toBe(expected);
@@ -251,6 +247,32 @@ describe('mediaQuery', function() {
   });
 });
 
+describe('keyframes', function() {
+  it('should replace px inside media queries if opts.keyframes', function() {
+    var options = {
+      keyframes: true,
+    };
+    var processed = postcss(pxToViewport(options)).process(
+      '@keyframes slidein { from { transform: translateX(16px) } }',
+    ).css;
+    var expected = '@keyframes slidein { from { transform: translateX(5vw) } }';
+
+    expect(processed).toBe(expected);
+  });
+
+  it('should not replace px inside media queries if not opts.keyframes', function() {
+    var options = {
+      keyframes: false,
+    };
+    var processed = postcss(pxToViewport(options)).process(
+      '@keyframes slidein { from { transform: translateX(16px) } }',
+    ).css;
+    var expected = '@keyframes slidein { from { transform: translateX(16px) } }';
+
+    expect(processed).toBe(expected);
+  });
+});
+
 describe('propList', function() {
   it('should only replace properties in the prop list', function() {
     var css =
@@ -293,10 +315,8 @@ describe('minPixelValue', function() {
       propWhiteList: [],
       minPixelValue: 2,
     };
-    var rules =
-      '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }';
-    var expected =
-      '.rule { border: 1px solid #000; font-size: 5vw; margin: 1px 3.125vw; }';
+    var rules = '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }';
+    var expected = '.rule { border: 1px solid #000; font-size: 5vw; margin: 1px 3.125vw; }';
     var processed = postcss(pxToViewport(options)).process(rules).css;
 
     expect(processed).toBe(expected);
@@ -304,10 +324,8 @@ describe('minPixelValue', function() {
 });
 
 describe('exclude', function() {
-  var rules =
-    '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }';
-  var covered =
-    '.rule { border: 1px solid #000; font-size: 5vw; margin: 1px 3.125vw; }';
+  var rules = '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }';
+  var covered = '.rule { border: 1px solid #000; font-size: 5vw; margin: 1px 3.125vw; }';
   it('when using regex at the time, the style should not be overwritten.', function() {
     var options = {
       exclude: /\/node_modules\//,
@@ -354,10 +372,8 @@ describe('exclude', function() {
 });
 
 describe('include', function() {
-  var rules =
-    '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }';
-  var covered =
-    '.rule { border: 1px solid #000; font-size: 5vw; margin: 1px 3.125vw; }';
+  var rules = '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }';
+  var covered = '.rule { border: 1px solid #000; font-size: 5vw; margin: 1px 3.125vw; }';
   it('when using regex at the time, the style should not be overwritten.', function() {
     var options = {
       include: /\/mobile\//,
@@ -404,10 +420,8 @@ describe('include', function() {
 });
 
 describe('include-and-exclude', function() {
-  var rules =
-    '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }';
-  var covered =
-    '.rule { border: 1px solid #000; font-size: 5vw; margin: 1px 3.125vw; }';
+  var rules = '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }';
+  var covered = '.rule { border: 1px solid #000; font-size: 5vw; margin: 1px 3.125vw; }';
 
   it('when using regex at the time, the style should not be overwritten.', function() {
     var options = {
@@ -459,10 +473,8 @@ describe('include-and-exclude', function() {
 });
 
 describe('regex', function() {
-  var rules =
-    '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }';
-  var covered =
-    '.rule { border: 1px solid #000; font-size: 5vw; margin: 1px 3.125vw; }';
+  var rules = '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }';
+  var covered = '.rule { border: 1px solid #000; font-size: 5vw; margin: 1px 3.125vw; }';
 
   it('when using regex at the time, the style should not be overwritten.', function() {
     var options = {
@@ -523,113 +535,49 @@ describe('replace', function() {
 
 describe('filter-prop-list', function() {
   it('should find "exact" matches from propList', function() {
-    var propList = [
-      'font-size',
-      'margin',
-      '!padding',
-      '*border*',
-      '*',
-      '*y',
-      '!*font*',
-    ];
+    var propList = ['font-size', 'margin', '!padding', '*border*', '*', '*y', '!*font*'];
     var expected = 'font-size,margin';
     expect(filterPropList.exact(propList).join()).toBe(expected);
   });
 
   it('should find "contain" matches from propList and reduce to string', function() {
-    var propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      '*border*',
-      '*',
-      '*y',
-      '!*font*',
-    ];
+    var propList = ['font-size', '*margin*', '!padding', '*border*', '*', '*y', '!*font*'];
     var expected = 'margin,border';
     expect(filterPropList.contain(propList).join()).toBe(expected);
   });
 
   it('should find "start" matches from propList and reduce to string', function() {
-    var propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      'border*',
-      '*',
-      '*y',
-      '!*font*',
-    ];
+    var propList = ['font-size', '*margin*', '!padding', 'border*', '*', '*y', '!*font*'];
     var expected = 'border';
     expect(filterPropList.startWith(propList).join()).toBe(expected);
   });
 
   it('should find "end" matches from propList and reduce to string', function() {
-    var propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      'border*',
-      '*',
-      '*y',
-      '!*font*',
-    ];
+    var propList = ['font-size', '*margin*', '!padding', 'border*', '*', '*y', '!*font*'];
     var expected = 'y';
     expect(filterPropList.endWith(propList).join()).toBe(expected);
   });
 
   it('should find "not" matches from propList and reduce to string', function() {
-    var propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      'border*',
-      '*',
-      '*y',
-      '!*font*',
-    ];
+    var propList = ['font-size', '*margin*', '!padding', 'border*', '*', '*y', '!*font*'];
     var expected = 'padding';
     expect(filterPropList.notExact(propList).join()).toBe(expected);
   });
 
   it('should find "not contain" matches from propList and reduce to string', function() {
-    var propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      '!border*',
-      '*',
-      '*y',
-      '!*font*',
-    ];
+    var propList = ['font-size', '*margin*', '!padding', '!border*', '*', '*y', '!*font*'];
     var expected = 'font';
     expect(filterPropList.notContain(propList).join()).toBe(expected);
   });
 
   it('should find "not start" matches from propList and reduce to string', function() {
-    var propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      '!border*',
-      '*',
-      '*y',
-      '!*font*',
-    ];
+    var propList = ['font-size', '*margin*', '!padding', '!border*', '*', '*y', '!*font*'];
     var expected = 'border';
     expect(filterPropList.notStartWith(propList).join()).toBe(expected);
   });
 
   it('should find "not end" matches from propList and reduce to string', function() {
-    var propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      '!border*',
-      '*',
-      '!*y',
-      '!*font*',
-    ];
+    var propList = ['font-size', '*margin*', '!padding', '!border*', '*', '!*y', '!*font*'];
     var expected = 'y';
     expect(filterPropList.notEndWith(propList).join()).toBe(expected);
   });
@@ -726,8 +674,7 @@ describe('/* px-to-viewport-ignore */ & /* px-to-viewport-ignore-next */', funct
   it('should ignore right-commented in multiline-css', function() {
     var css =
       '.rule {\n  font-size: 15px;\n  width: 100px; /*px-to-viewport-ignore*/\n  height: 50px;\n}';
-    var expected =
-      '.rule {\n  font-size: 4.6875vw;\n  width: 100px;\n  height: 15.625vw;\n}';
+    var expected = '.rule {\n  font-size: 4.6875vw;\n  width: 100px;\n  height: 15.625vw;\n}';
 
     var processed = postcss(pxToViewport()).process(css).css;
 

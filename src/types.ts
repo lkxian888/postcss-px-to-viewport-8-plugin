@@ -53,6 +53,10 @@ export type OptionType = {
    */
   mediaQuery?: boolean;
   /**
+   * keyframes 里的单位是否需要转换单位
+   */
+  keyframes?: boolean;
+  /**
    * 是否直接更换属性值，而不添加备用属性
    */
   replace?: boolean;
@@ -84,7 +88,7 @@ export type OptionType = {
 
 };
 
-export type ParentExtendType = { prop: string; value: string; params: string };
+export type ParentExtendType = { prop: string; value: string; params: string; name: string; };
 
 export type ParentType = {
   parent: Rule['parent'] & ParentExtendType;
