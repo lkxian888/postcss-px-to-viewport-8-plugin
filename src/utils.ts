@@ -44,7 +44,3 @@ export const declarationExists = (decls: ParentExtendType[], prop: string, value
     return decl.prop === prop && decl.value === value;
   });
 };
-
-export const validateParams = (params: string, mediaQuery: boolean) => {
-  return !params || (params && mediaQuery);
-};

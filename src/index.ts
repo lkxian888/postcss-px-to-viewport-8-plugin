@@ -7,7 +7,6 @@ import {
   declarationExists,
   getUnit,
   isExclude,
-  validateParams,
 } from './utils';
 import objectAssign from 'object-assign';
 
@@ -25,6 +24,7 @@ const defaults: Required<Omit<OptionType, 'exclude' | 'include'>> = {
   propList: ['*'],
   minPixelValue: 1,
   mediaQuery: false,
+  keyframes: false,
   replace: true,
   landscape: false,
   landscapeUnit: 'vw',
@@ -94,7 +94,14 @@ const postcssPxToViewport = (options: OptionType) => {
           }
         }
 
-        if (!validateParams(rule.parent?.params, opts.mediaQuery)) return;
+        if (rule.parent.type === 'atrule') {
+          if (rule.parent.name === 'media' && !opts.mediaQuery) {
+            return;
+          }
+          if (rule.parent.name === 'keyframes' && !opts.keyframes) {
+            return;
+          }
+        }
 
         rule.walkDecls((decl, i) => {
           if (decl.value.indexOf(opts.unitToConvert) === -1) return;
